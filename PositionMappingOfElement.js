@@ -25,7 +25,7 @@
   };
 
   var $body = $('body');
-  var $elem = $('div,section,article,aside,header,footer,p');
+  var $elem = $('div,section,article,aside,header,footer,p,li,ul,ol,nav,body,a,button,h1,h2,h3,h4');
   $body.append('<style type="text/css">.mouseOn{ background:#ffa !important; }</style>'
                +'<div id="flexibleController">'
                +'<div><textarea></textarea></div>'
