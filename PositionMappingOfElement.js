@@ -72,7 +72,8 @@
   });
   $flexibleController.draggable();
 
-  $flexibleAdd.on('mouseup', function() {
+  $flexibleAdd.on('click', function(e) {
+    e.stopPropagation();
     $.fn.addNew();
   });
 
