@@ -29,12 +29,13 @@
   $body.append('<style type="text/css">.mouseOn{ background:#ffa !important; }</style>'
                +'<div id="flexibleController">'
                +'<div><textarea></textarea></div>'
+               +'<div><span id="flexibleElemParent">&nbsp;</span></div>'
                +'<button id="flexibleAdd">+Add New</button>'
                +'</div>');
   var $flexibleController = $body.find('#flexibleController');
   $flexibleController.css({
     width:'130px',
-    height:'150px',
+    height:'160px',
     border:'1px solid #ccc',
     borderRadius:'15px',
     zIndex:1000000,
@@ -68,9 +69,15 @@
     display:'block',
     width:'120px',
     height:'80px',
-    margin:'0 auto 15px',
+    margin:'0 auto',
     padding:'5px',
     background:'none'
+  });
+  var $flexibleElemParent = $flexibleController.find('#flexibleElemParent');
+  $flexibleElemParent.css({
+    height:'20px',
+    fontSize:'12px',
+    whiteSpace:'nowrap'
   });
 
   $flexibleController.draggable();
@@ -81,12 +88,15 @@
   });
 
   $.fn.targetAction = function() {
-    var _position = this.css('position');
+    var $t = this;
+    var _position = $t.css('position');
     if (_position == 'static') {
-      this.css('position', 'relative');
+      $t.css('position', 'relative');
     }
-    this.prepend($.fn.flexibleElem());
-    this.children('.flexibleElem').draggable().resizable().show(300);
+    $t.prepend($.fn.flexibleElem());
+    $t.children('.flexibleElem')
+      .draggable().resizable()
+      .show(300, function(){ $(this).trigger('click'); });
   };
 
   var addFlexibleElem = function(e) {
@@ -98,8 +108,8 @@
       outline: 'none'
     }).removeClass('mouseOn');
     if (e.type === 'click') {
-      if ($flexibleAdd.is(':hidden')) $flexibleAdd.show(300);
       e.preventDefault();
+      if ($flexibleAdd.is(':hidden')) $flexibleAdd.show(300);
       $('mouseOn').css({
         outline: 'none'
       }).removeClass('mouseOn');
@@ -113,6 +123,13 @@
     $elem.on('mouseover.r mouseout.r click.r', addFlexibleElem);
   };
 
+  $.fn.displayParentInfo = function() {
+    var $p       = this;
+    var $p_id    = $p.attr('id') ? '#'+$p.attr('id') : '';
+    var $p_class = $p.attr('class') ? '.'+$p.attr('class').replace(/\s/g,'.') : '';
+    $flexibleElemParent.text($p[0].tagName.toLowerCase() + $p_id + $p_class);
+  };
+
   $(document).on('drag.r dragstart.r dragstop.r', '.flexibleElem', function(e, ui) {
     var $t      = $(this);
     var $p      = $t.parent();
@@ -120,7 +137,8 @@
     var _left   = Math.round(ui.position.left);
     var _width  = $t.width();
     var _height = $t.height();
-    $textarea.val('top: '+_top+'px;\nleft: '+_left+'px;\n'+'width: '+_width+'px;\nheight: '+_height+';');
+    $textarea.val('top: '+_top+'px;\nleft: '+_left+'px;\n'+'width: '+_width+'px;\nheight: '+_height+'px;');
+    $p.displayParentInfo();
     if (e.type === 'dragstart') $p.css({outline: '1px solid #f90'});
     if (e.type === 'dragstop')  $p.css({outline: 'none'});
   }).on('resize.r resizestart.r resizestop.r', '.flexibleElem',  function(e, ui) {
@@ -130,16 +148,19 @@
     var _left   = ui.position.left;
     var _width  = ui.size.width;
     var _height = ui.size.height;
-    $textarea.val('top: '+_top+'px;\nleft: '+_left+'px;\n'+'width: '+_width+'px;\nheight: '+_height+';');
+    $textarea.val('top: '+_top+'px;\nleft: '+_left+'px;\n'+'width: '+_width+'px;\nheight: '+_height+'px;');
+    $p.displayParentInfo();
     if (e.type === 'resizestart') $p.css({outline: '1px solid #f90'});
     if (e.type === 'resizestop')  $p.css({outline: 'none'});
-  }).on('click', '.flexibleElem', function() {
+  }).on('click', '.flexibleElem', function(e) {
+    e.preventDefault();
     var $t = $(this);
     var _top = $t.css('top');
     var _left = $t.css('left');
     var _width = $t.width();
     var _height = $t.height();
-    $textarea.val('top: '+_top+';\nleft: '+_left+';\n'+'width: '+_width+'px;\nheight: '+_height+';');
+    $textarea.val('top: '+_top+';\nleft: '+_left+';\n'+'width: '+_width+'px;\nheight: '+_height+'px;');
+    $t.parent().displayParentInfo();
   });
 
 
