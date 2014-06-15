@@ -22,7 +22,7 @@
 
   var flexibleElemCount = 0;
   $.fn.flexibleElem = function() {
-    return '<div class="flexibleElem" style="width:60px;height:60px;top:0;left:0;z-index:'+ 99999 + ++flexibleElemCount +';position:absolute;background:rgba(255,0,0,0.2);cursor:move;display:none;">'+ '' +'</div>';
+    return '<div class="flexibleElem" style="width:60px;height:60px;top:0;left:0;z-index:'+ (99999 + ++flexibleElemCount) +';position:absolute;background:rgba(255,0,0,0.2);cursor:move;display:none;">'+ '' +'</div>';
   };
 
   var $body = $('body');
