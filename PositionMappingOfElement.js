@@ -27,12 +27,49 @@
   var $body = $('body');
   var $elem = $('div,section,article,aside,header,footer,p');
   $body.append('<style type="text/css">.mouseOn{ background:#ffa !important; }</style>'
-               +'<div id="flexibleController" style="width:130px;height:150px;border:1px solid #999;border-radius:15px;z-index:1000000;position:fixed;bottom:0;left:0;background:#fff;padding:15px;cursor:move;">'
-               +'<div><textarea style="display:block;width:120px;height:80px;margin:0 auto 15px;padding:5px;"></textarea></div>'
-               +'<div><button id="flexibleAdd" style="color:#999;font-size:13px;margin:0 auto;line-height:14px;text-align:center;width:40px;height:40px;padding:5px;border-radius:40px;background:none;display:none;">+Add New</button></div>'
+               +'<div id="flexibleController">'
+               +'<div><textarea></textarea></div>'
+               +'<button id="flexibleAdd">+Add New</button>'
                +'</div>');
   var $flexibleController = $body.find('#flexibleController');
+  $flexibleController.css({
+    width:'130px',
+    height:'150px',
+    border:'1px solid #999',
+    borderRadius:'15px',
+    zIndex:1000000,
+    position:'fixed',
+    bottom:0,
+    left:0,
+    background:'#fff',
+    padding:'15px',
+    cursor:'move'
+  });
   var $flexibleAdd = $flexibleController.find('#flexibleAdd');
+  $flexibleAdd.css({
+    color:'#999',
+    fontSize:'12px',
+    margin:'0 auto',
+    lineHeight:'14px',
+    textAlign:'center',
+    width:'40px',
+    height:'40px',
+    padding:'5px',
+    borderRadius:'40px',
+    background:'none',
+    display:'block'
+  }).hide();
+  var $textarea = $flexibleController.find('textarea');
+  $textarea.css({
+    borderRadius:'5px',
+    fontSize:'12px',
+    border:'1px solid #ccc',
+    display:'block',
+    width:'120px',
+    height:'80px',
+    margin:'0 auto 15px',
+    padding:'5px'
+  });
   $flexibleController.draggable();
 
   $flexibleAdd.on('mouseup', function() {
@@ -57,7 +94,7 @@
       outline: 'none'
     }).removeClass('mouseOn');
     if (e.type === 'click') {
-      if ($flexibleAdd.css('display') == 'none') $flexibleAdd.show(300);
+      if ($flexibleAdd.is(':hidden')) $flexibleAdd.show(300);
       e.preventDefault();
       $('mouseOn').css({
         outline: 'none'
@@ -72,7 +109,6 @@
     $elem.on('mouseover.r mouseout.r click.r', addFlexibleElem);
   };
 
-  var $textarea = $flexibleController.find('textarea');
   $(document).on('drag.r dragstart.r dragstop.r', '.flexibleElem', function(e, ui) {
     var $t = $(this);
     var $p = $t.parent();
