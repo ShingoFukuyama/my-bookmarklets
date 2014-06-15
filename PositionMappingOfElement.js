@@ -123,7 +123,7 @@
     $textarea.val('top: '+_top+'px;\nleft: '+_left+'px;\n'+'width: '+_width+'px;\nheight: '+_height+';');
     if (e.type === 'dragstart') $p.css({outline: '1px solid #f90'});
     if (e.type === 'dragstop')  $p.css({outline: 'none'});
-  }).on('resize.r resizestart.r resizestop.r', function(e, ui) {
+  }).on('resize.r resizestart.r resizestop.r', '.flexibleElem',  function(e, ui) {
     var $t      = ui.element; // ! Not $(this)
     var $p      = $t.parent();
     var _top    = ui.position.top;
@@ -133,6 +133,13 @@
     $textarea.val('top: '+_top+'px;\nleft: '+_left+'px;\n'+'width: '+_width+'px;\nheight: '+_height+';');
     if (e.type === 'resizestart') $p.css({outline: '1px solid #f90'});
     if (e.type === 'resizestop')  $p.css({outline: 'none'});
+  }).on('click', '.flexibleElem', function() {
+    var $t = $(this);
+    var _top = $t.css('top');
+    var _left = $t.css('left');
+    var _width = $t.width();
+    var _height = $t.height();
+    $textarea.val('top: '+_top+';\nleft: '+_left+';\n'+'width: '+_width+'px;\nheight: '+_height+';');
   });
 
 
